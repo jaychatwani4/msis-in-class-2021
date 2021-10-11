@@ -37,7 +37,6 @@ const SomeApp = {
             })
         },
         fetchOfferData(s) {
-            console.log("Fetching offer data for ", s);
             fetch('/api/offer/?student=' + s.id)
             .then( response => response.json() )
             .then( (responseJson) => {
