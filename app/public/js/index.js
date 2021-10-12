@@ -4,7 +4,8 @@ const SomeApp = {
       return {
         students: [],
         selectedStudent: null,
-        offers: []
+        offers: [],
+        offerForm: {}
       }
     },
     computed: {},
@@ -37,6 +38,7 @@ const SomeApp = {
             })
         },
         fetchOfferData(s) {
+            console.log("Fetching offer data for ", s);
             fetch('/api/offer/?student=' + s.id)
             .then( response => response.json() )
             .then( (responseJson) => {
@@ -48,6 +50,27 @@ const SomeApp = {
             })
             .catch( (error) => {
                 console.error(error);
+            });
+        },
+        postNewOffer(evt) {
+          this.offerForm.studentId = this.selectedStudent.studentId;
+  
+          console.log("Posting:", JSON.stringify(this.offerForm));
+          
+          fetch('api/offer/create.php', {
+              method:'POST',
+              body: JSON.stringify(this.offerForm),
+              headers: {
+                "Content-Type": "application/json; charset=utf-8"
+              }
+            })
+            .then( response => response.json() )
+            .then( json => {
+              console.log("Returned from post:", json);
+              // TODO: test a result was returned!
+              this.offers.push(json[0]);
+  
+              this.offerForm = {};
             });
         }
     },
